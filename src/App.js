@@ -12,10 +12,10 @@ export default class App extends Component {
   render () {
     return (
       <Router>
-         <Switch>
-           <Route path='/login' component={Login}/>
-           <Route path='/' component={Admin}/>
-         </Switch>
+        <Switch>
+          <Route path='/login' component={Login}/>
+          <Route path='/' component={Admin}/>
+        </Switch>
       </Router>
     )
   }
