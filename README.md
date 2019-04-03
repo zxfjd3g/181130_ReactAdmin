@@ -40,7 +40,31 @@
       Input
       Icon
       Button
-      
+
+## 6. git管理项目
+    1). 创建远程仓库
+    2). 创建本地仓库
+        a. 配置.gitignore
+        b. git init
+        c. git add .
+        d. git commit -m "init"
+    3). 将本地仓库推送到远程仓库
+        git remote add origin url
+        git push origin master
+    4). 在本地创建dev分支, 并推送到远程
+        git checkout -b dev
+        git push origin dev
+    5). 如果本地有修改
+        git add .
+        git commit -m "xxx"
+        git push origin dev
+    6). 如果远程修改
+        git pull origin dev
+    7). 新的同事: 克隆仓库
+        git clone url
+        git checkout -b dev origin/dev
+        git pull origin dev
+
 ## 6. 收集表单数据和表单的前台验证
     1). 高阶函数
       a. 接收的参数是函数
