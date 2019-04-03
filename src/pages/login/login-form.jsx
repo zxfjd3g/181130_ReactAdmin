@@ -1,4 +1,5 @@
 import React, {Component} from 'react'
+import PropTypes from 'prop-types'
 import {Form, Input, Button, Icon} from 'antd'
 
 const FormItem = Form.Item  // <FormItem>  <Form.Item>
@@ -8,6 +9,11 @@ const FormItem = Form.Item  // <FormItem>  <Form.Item>
 2. 表单检验
  */
 class LoginForm extends Component {
+
+  // 声明组件接收属性的属性名, 属性值的类型, 属性的必须性
+  static propTypes = {
+    login: PropTypes.func.isRequired
+  }
 
   handleSubmit = (event) => {
     // 阻止事件的默认行为
@@ -19,7 +25,9 @@ class LoginForm extends Component {
       if(!err) {
         // 读取输入的数据
         const values = this.props.form.getFieldsValue() // values是包含所有输入数据的对象
-        console.log('发送登陆的ajax请求', values)
+        // console.log('发送登陆的ajax请求', values)
+        // this.props.login(values.username, values.password)
+        this.props.login(values)
       } else {
         // 表单验证不通过
       }
@@ -108,10 +116,9 @@ form对象:
   2). 表单验证
 
  */
-const WrapLoginForm = Form.create()(LoginForm)
-
-// export default LoginForm
-export default WrapLoginForm
+// const WrapLoginForm = Form.create()(LoginForm)
+// export default WrapLoginForm
+export default Form.create()(LoginForm)
 
 /*
 1. 用户名

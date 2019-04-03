@@ -71,3 +71,23 @@
       b. 返回值是函数
     2). 高阶组件:  本质上就是一个函数
       接收一个组件/组件标签, 返回一个新的组件/组件标签
+    3). form对象
+      如何让包含<Form>的组件得到form对象?  WrapLoginForm = Form.create()(LoginForm)
+      WrapLoginForm是LoginForm的父组件, 给LoginForm传入form对象类型的属性
+      用到了高阶函数和高阶组件的技术
+    4). 操作表单数据
+        form.getFieldDecorator('标识名称', {initialValue: 初始值})(<Input/>)包装表单项组件标签
+        form.getFieldsValue(): 得到包含所有输入数据的对象
+        form.resetFieldsValue(): 重置输入的值
+    5). 前台表单验证
+        1). 声明式实时表单验证:
+          form.getFieldDecorator('标识名称', {rules: [{min: 4, message: '错误提示信息'}]})(<Input/>)
+        2). 编程式自定义表单验证
+          form.getFieldDecorator('标识名称', {rules: [{validator: this.validatePwd}]})(<Input/>)
+          validatePwd = (rule, value, callback) => {
+            if(有问题) callback('错误提示信息') else callack()
+          } 
+        3).点击提示时统一验证
+          form.validateFields((error) => {
+            if(!error) {通过了验证, 发送ajax请求}
+          })
