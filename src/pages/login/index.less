@@ -38,6 +38,27 @@
       background: #fff;
       overflow: hidden;
 
+      .error-msg-wrap {
+        position: absolute;
+        top: 0;
+        left: 0;
+        width: 100%;
+        div {
+          visibility: hidden;
+          height: 30px;
+          line-height: 30px;
+          background: #f60c1a;
+          color: #ffffff;
+          font-size: 16px;
+          text-align: center;
+          transform: translateY(-30px);
+          transition: all .3s;
+          &.show {
+            visibility: visible;
+            transform: translateY(0);
+          }
+        }
+      }
       .title {
         line-height: 1;
         margin-bottom: 50px;
@@ -46,12 +67,12 @@
         font-weight: bold;
         text-align: center;
       }
-    }
 
-    .login-form {
-      .login-form-button {
-        width: 100%;
-        margin-top: 15px;
+      .login-form {
+        .login-form-button {
+          width: 100%;
+          margin-top: 15px;
+        }
       }
     }
   }
