@@ -4,6 +4,8 @@ import LoginForm from './login-form'
 import logo from './images/logo.png'
 import './index.less'
 
+import {reqLogin} from '../../api'
+
 
 
 export default class Login extends Component {
@@ -14,8 +16,10 @@ export default class Login extends Component {
 
   // 请求登陆
   // login = (name, pwd) => {
-  login = ({username, password}) => {
-    alert(`发送ajax请求: username=${username}, password=${password}`)
+  login = async ({username, password}) => {
+    // alert(`发送ajax请求: username=${username}, password=${password}`)
+    const result = await reqLogin(username, password)
+    console.log('result', result)
   }
 
   render() {

@@ -16,6 +16,7 @@ class LoginForm extends Component {
   }
 
   handleSubmit = (event) => {
+    console.log('handleSubmit()')
     // 阻止事件的默认行为
     event.preventDefault()
 

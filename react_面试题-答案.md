@@ -279,3 +279,82 @@
         4). 响应数据格式
     2). 测接口
         测试接口文档与真实接口是否一致
+
+# day05
+## 1. git管理项目的常用命令
+    1). 创建远程仓库
+    2). 创建本地仓库
+        a. 配置.gitignore
+        b. git init
+        c. git add .
+        d. git commit -m "init"
+    3). 将本地仓库推送到远程仓库
+        git remote add origin url
+        git push origin master
+    4). 在本地创建dev分支, 并推送到远程
+        git checkout -b dev
+        git push origin dev
+    5). 如果本地有修改
+        git add .
+        git commit -m "xxx"
+        git push origin dev
+    6). 如果远程修改
+        git pull origin dev
+    7). 新的同事: 克隆仓库
+        git clone url
+        git checkout -b dev origin/dev
+        git pull origin dev
+
+## 2. 说说高阶函数与高阶组件
+    1). 高阶函数
+        理解: 一类特别的函数
+            情况1: 参数是函数
+            情况2: 返回是函数
+        常见的高阶函数: 
+            定时器设置函数
+            数组的forEach()/map()/filter()/reduce()/find()/findIndex()
+            函数对象的bind()
+            Promise
+            antd中的form
+        作用: 
+            能实现更加动态, 更加可扩展的功能
+    2). 高阶组件
+        理解: 本质就是一个函数, 接收一个组件类型的参数, 返回一个新的组件
+        作用: 对已有组件进行包装扩展的手段, 一般会向被包装组件传入特定的标签属性
+
+## 3. ...运算符的作用
+    1). 打包: 将多个数据封装到容器中
+      function fn (...args)  fn(1, 2, 3)
+    2). 解包: 将容器中的多个数据拆解出来分别使用
+      [1, 2, ...arr1]
+      {...person}
+      <Person {...props}/>
+
+## 4. 用数组的相关方法实现以下业务需求
+    公司前后招聘了10个员工(性别,年龄, 月薪各不相同),有以下需求
+    1). 列表显示所有员工的所有信息 forEach()
+    2). 对员工进行年薪降序列表显示  sort((e1, e2) => e1.age-e2.age)
+    3). 得到男员工的总月薪: reduce()
+    4). 查找一个月薪高于12000, 低于14000的男员工: find()
+    5). 查找出所有月薪高于12000的员工:  filter()
+    6). 列表显示所有员工的姓名/性别和年薪:
+    
+    const employees = [
+       {name: 'A', sex: '男', age: 21, salary: 10000},
+       {name: 'B', sex: '女', age: 25, salary: 12000},
+       {name: 'C', sex: '男', age: 24, salary: 13000},
+       {name: 'D', sex: '男', age: 24, salary: 12500},
+       {name: 'E', sex: '女', age: 21, salary: 14000},
+       {name: 'F', sex: '男', age: 24, salary: 16000},
+       {name: 'G', sex: '男', age: 23, salary: 9000},
+       {name: 'H', sex: '女', age: 21, salary: 11000},
+       {name: 'I', sex: '男', age: 23, salary: 13200},
+       {name: 'J', sex: '男', age: 23, salary: 15000}
+    ]
+    
+    1). employees.forEach(e => console.log(e))
+    2). employees.sort((e1, e2) => e2.salary-e1.salary)
+    3). employees.reduce((preTotal, e) => preTotal + (e.sex=='男'?e.salary:0), 0)
+    4). employees.find(e => e.salary>1200 && e.salary<1400 && e.sex==='男')
+    5). employees.filter(e => e.salary>1200)
+    6). employees.map(e => ({'姓名/性别': `${e.name}/${e.sex}`, '年薪': e.salary*14}))
