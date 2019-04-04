@@ -1,10 +1,13 @@
 import React, {Component} from 'react'
-
+import {Redirect} from 'react-router-dom'
 import LoginForm from './login-form'
 import logo from './images/logo.png'
 import './index.less'
 
 import {reqLogin} from '../../api'
+import storageUtil from '../../util/storageUtil'
+import MemoryUtils from '../../util/MemoryUtils'
+
 
 
 
@@ -21,7 +24,11 @@ export default class Login extends Component {
     const result = await reqLogin(username, password) // {status: 0, data: user对象} {status: 1, msg: '错误信息'}
     // console.log('result', result)
     if(result.status===0) { // 成功了
-
+      const user = result.data
+      // 保存user到local storage
+      storageUtil.saveUser(user)
+      // 保存user到内存中
+      MemoryUtils.user = user
       // 跳转到后台管理界面
       this.props.history.replace('/')
     } else {
@@ -33,6 +40,11 @@ export default class Login extends Component {
   }
 
   render() {
+    // 如果用户已经登陆, 自动跳转到admin
+    if(MemoryUtils.user && MemoryUtils.user._id) {
+      return <Redirect to='/'/>
+    }
+
     const {errorMsg} = this.state
 
     return (
