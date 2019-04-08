@@ -1,7 +1,7 @@
 import React, {Component} from 'react'
 
 /*
-主页路由由组件
+主页由组件
  */
 export default class Home extends Component {
   render() {

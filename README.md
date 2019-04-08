@@ -158,3 +158,60 @@
         定义路由组件
         注册路由
         
+# day03
+## 1. LeftNav组件
+    1). 使用antd的组件
+        Menu / Item / SubMenu
+    
+    2). 使用react-router
+        withRouter(): 包装非路由组件, 给其传入history/location/match属性
+        history: push()/replace()/goBack()
+        location: pathname属性
+        match: params属性
+    
+    3). componentWillMount与componentDidMount的比较
+        componentWillMount: 在第一次render()前调用一次, 为第一次render()准备数据(同步)
+        componentDidMount: 在第一次render()之后调用一次, 启动异步任务, 后面异步更新状态重新render
+    
+    4). 根据动态生成Item和SubMenu的数组
+        arr.map(): 二级菜单
+        arr.reduce(): 二级菜单
+        arr.reduce() + 递归调用: 任意多级菜单
+    
+    5). 2个问题?
+        刷新时如何选中对应的菜单项?
+        刷新子菜单路径时, 自动打开子菜单列表?
+        
+## 2. Header组件
+    1). 获取登陆用户的名称显示: MemoryUtils
+    
+    2). 天气预报
+        使用jsonp库发jsonp请求百度天气预报接口
+        对jsonp请求的理解
+        
+    3). 当前时间
+        循环定时器, 每隔1s更新当前时间状态
+        格式化指定时间
+        
+    4). 当前导航项的标题
+        得到当前请求的路由path: 包装成路由组件获取
+        根据path在menuList中遍历查找对应的item的title
+        
+## 3. Category组件
+    1). 相关接口请求函数
+        获取分类列表
+        获取指定分类
+        添加分类
+        更新分类
+        
+    2). 使用antd组件构建界面
+        Card
+        Table
+        Button
+        Icon
+    
+    3). 异步获取一级分类列表显示
+        设计一级分类列表的状态
+        异步获取一级分类列表
+        更新状态, 显示
+
