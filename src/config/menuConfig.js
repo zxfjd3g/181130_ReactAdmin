@@ -13,7 +13,7 @@ const menuList = [
         title: '品类管理',
         key: '/category',
         icon: 'bars',
-        children: [
+        /*children: [
           {
             title: 'xxx',
             key: '/xxx',
@@ -24,7 +24,7 @@ const menuList = [
             key: '/yyy',
             icon: 'user'
           }
-        ]
+        ]*/
       },
       {
         title: '商品管理',
