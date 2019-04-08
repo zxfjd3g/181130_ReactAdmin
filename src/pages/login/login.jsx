@@ -1,7 +1,7 @@
 import React, {Component} from 'react'
 import {Redirect} from 'react-router-dom'
 import LoginForm from './login-form'
-import logo from './images/logo.png'
+import logo from '../../assets/images/logo.png'
 import './index.less'
 
 import {reqLogin} from '../../api'
@@ -20,6 +20,7 @@ export default class Login extends Component {
   // 请求登陆
   // login = (name, pwd) => {
   login = async ({username, password}) => {
+    console.log('login login()')
     // alert(`发送ajax请求: username=${username}, password=${password}`)
     const result = await reqLogin(username, password) // {status: 0, data: user对象} {status: 1, msg: '错误信息'}
     // console.log('result', result)

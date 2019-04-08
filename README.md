@@ -96,7 +96,7 @@
 
 ## 1. 后台应用
     启动后台应用: mongodb服务必须启动
-    使用postman测试接口:
+    使用postman测试接口(根据接口文档):
         访问测试: post请求的参数在body中设置
         添加
         导出/导入
@@ -135,7 +135,6 @@
         3). 如果成功了:
             保存user到local/内存中
             跳转到admin
-            
         4). 如果内存中的user有值, 自动跳转到admin
     src/index.js
         读取local中user到内存中保存
@@ -148,3 +147,13 @@
             兼容不同的浏览器
     MemoryUtils.js
         用来在内存中保存数据(user)的工具类
+        
+## 4. 搭建admin的整体界面结构
+    1). 拆分组件
+        LeftNav: 左侧导航
+        Header: 右侧头部
+        Footer: 右侧底部
+    2). 使用antd的layout进行整体布局
+    3). 子路由
+        定义路由组件
+        注册路由

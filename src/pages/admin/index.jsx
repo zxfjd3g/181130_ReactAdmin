@@ -1,13 +1,21 @@
 import React, {Component} from 'react'
-import {Redirect} from 'react-router-dom'
-import {Row, Col}  from 'antd'
+import {Redirect, Route, Switch} from 'react-router-dom'
+import {Layout }  from 'antd'
 
 import MemoryUtils from '../../util/MemoryUtils'
 import LeftNav from '../../components/left-nav'
 import Header from '../../components/header'
 import Footer from '../../components/footer'
+import Home from '../home/home'
+import Category from '../category/category'
+import Product from '../product/product'
+import Role from '../role/role'
+import User from '../user/user'
+import Line from '../charts/line'
+import Bar from '../charts/bar'
+import Pie from '../charts/pie'
 
-import './index.less'
+const {Sider, Content} = Layout
 
 export default class Admin extends Component {
   render() {
@@ -20,16 +28,28 @@ export default class Admin extends Component {
     }
 
     return (
-      <Row className='container'>
-        <Col span={4}>
+      <Layout>
+        <Sider>
           <LeftNav/>
-        </Col>
-        <Col span={20} className='main'>
+        </Sider>
+        <Layout>
           <Header/>
-          <div className='content'>界面主体区域</div>
+          <Content style={{background: 'white'}}>
+            <Switch>
+              <Route path='/home' component={Home}/>
+              <Route path='/category' component={Category}/>
+              <Route path='/product' component={Product}/>
+              <Route path='/user' component={User}/>
+              <Route path='/role' component={Role}/>
+              <Route path="/charts/bar" component={Bar}/>
+              <Route path="/charts/pie" component={Pie}/>
+              <Route path="/charts/line" component={Line}/>
+              <Redirect to='/home'/>{/*只要与上面不匹配就自动跳转到home*/}
+            </Switch>
+          </Content>
           <Footer/>
-        </Col>
-      </Row>
+        </Layout>
+      </Layout>
     )
   }
 }

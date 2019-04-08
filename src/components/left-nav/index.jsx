@@ -1,7 +1,9 @@
 import React, {Component} from 'react'
 import {Menu, Icon} from 'antd'
+import {Link} from 'react-router-dom'
 import './index.less'
 import menuList from '../../config/menuConfig'
+import logo from '../../assets/images/logo.png'
 
 const SubMenu = Menu.SubMenu
 const Item = Menu.Item
@@ -16,36 +18,43 @@ export default class LeftNav extends Component {
   */
   getMenuNodes = () => {
     return menuList.map(item => {
-      if (!item.children) {
+      if(!item.children) { // 没有子节点
         return (
           <Menu.Item key={item.key}>
-            <Icon type={item.icon} />
-            <span>{item.title}</span>
+            <Link to={item.key}>
+              <Icon type={item.icon} />
+              <span>{item.title}</span>
+            </Link>
           </Menu.Item>
         )
       } else {
         return (
           <SubMenu key={item.key} title={<span><Icon type={item.icon} /><span>{item.title}</span></span>}>
-            {/*根据item.children数据数组, 生成<Item>的数组*/}
             {
               item.children.map(cItem => (
                 <Menu.Item key={cItem.key}>
-                  <Icon type={cItem.icon} />
-                  <span>{cItem.title}</span>
+                  <Link to={cItem.key}>
+                    <Icon type={cItem.icon} />
+                    <span>{cItem.title}</span>
+                  </Link>
                 </Menu.Item>
               ))
             }
           </SubMenu>
         )
       }
-
-
     })
   }
 
   render() {
     return (
       <div className='left-nav'>
+
+        <Link className='logo' to='/home'>
+          <img src={logo} alt="logo"/>
+          <h1>硅谷后台</h1>
+        </Link>
+
         <Menu
           mode="inline"
           theme="dark"
@@ -55,18 +64,6 @@ export default class LeftNav extends Component {
           {
             this.getMenuNodes()
           }
-
-         {/* <Menu.Item key="1">
-            <Icon type="pie-chart" />
-            <span>Option 1</span>
-          </Menu.Item>
-
-          <SubMenu key="sub1" title={<span><Icon type="mail" /><span>Navigation One</span></span>}>
-            <Item key="5">Option 5</Item>
-            <Item key="6">Option 6</Item>
-            <Item key="7">Option 7</Item>
-            <Item key="8">Option 8</Item>
-          </SubMenu>*/}
         </Menu>
       </div>
     )

@@ -1,15 +1,15 @@
 const menuList = [
-  {
+  {  // <Menu.Item>
     title: '首页', // 菜单标题名称
     key: '/home', // 对应的path
     icon: 'home', // 图标名称
   },
-  {
+  { // <SubMenu>
     title: '商品',
     key: '/products',
     icon: 'appstore',
     children: [ // 子菜单列表
-      {
+      { // <Item>
         title: '品类管理',
         key: '/category',
         icon: 'bars',
@@ -45,11 +45,11 @@ const menuList = [
     icon: 'safety',
   },
 
-  {
+/*  {
     title: '订单管理',
     key: '/order',
     icon: 'safety',
-  },
+  },*/
 
   {
     title: '图形图表',
