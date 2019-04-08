@@ -67,3 +67,8 @@ export default class Login extends Component {
     )
   }
 }
+
+/*
+1. 在父组件中给子组件标签传递属性
+2. 子组件中声明接收属性
+*/
