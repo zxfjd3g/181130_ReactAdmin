@@ -10,7 +10,8 @@
     "react-router-dom": "4.3.1",
     "prop-types": "15.6.2",
     "axios": "0.18.0",
-    "store": "2.0.12"
+    "store": "2.0.12",
+    "jsonp": "0.2.1"
   },
   "devDependencies": {
     "react-app-rewired": "1.6.2",
