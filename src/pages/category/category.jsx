@@ -9,6 +9,7 @@ import {
 } from 'antd'
 
 import {reqCategorys, reqUpdateCategory, reqAddCategory} from '../../api'
+import LinkButton from '../../components/link-button'
 
 
 /*
@@ -71,9 +72,9 @@ export default class Category extends Component {
         render: (category) => {
           return (
             <span>
-              <a href='javascript:'>修改</a>
+              <LinkButton>修改</LinkButton>
               &nbsp;&nbsp;&nbsp;
-              <a href='javascript:' onClick={() => this.showSubCates(category)}>查看子分类</a>
+              <LinkButton onClick={() => this.showSubCates(category)}>查看子分类</LinkButton>
             </span>
           )
         }
