@@ -59,7 +59,12 @@
        {name: 'J', sex: '男', age: 23, salary: 15000}
     ]
 
-
+# day06
+## 1. 对jsonp请求的理解
+## 2. 对代理的理解
+## 3. componentWillMount与componentDidMount的比较
+## 4. 比较函数的call()/apply()/bind()
+## 5. 详细说明如何判断函数中的this
 
 
 
