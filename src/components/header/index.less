@@ -1,3 +1,46 @@
 .header {
-  height: 100px;
+  background-color: #ffffff;
+  .header-top {
+    height: 40px;
+    line-height: 40px;
+    padding: 0 20px;
+    text-align: right;
+    button {
+      margin-left: 10px;
+    }
+  }
+  .header-bottom {
+    height: 40px;
+    line-height: 40px;
+    padding: 0 20px;
+    border-top: 1px solid #1DA57A;
+    .title {
+      text-align: center;
+      font-size: 16px;
+      &:after {
+        position: absolute;
+        content: '';
+        left: 73px;
+        top: 39px;
+        border-top: 9px solid #ffffff;
+        border-left: 12px solid transparent;
+        border-right: 12px solid transparent;
+      }
+    }
+    .weather {
+      text-align: right;
+      font-size: 14px;
+      .date {
+        margin-right: 10px;
+        vertical-align: middle;
+      }
+      .weather-img {
+        height: 15px;
+      }
+      .weather-detail {
+        margin-left: 5px;
+        vertical-align: middle;
+      }
+    }
+  }
 }
