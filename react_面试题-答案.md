@@ -402,7 +402,6 @@
        }
        fn2()
        
-
 ## 5. 详细说明如何判断函数中的this
     1). 正常情况: 执行函数的方式决定了函数中的this
        直接调用: fn()       window
@@ -417,3 +416,14 @@
           dom事件监听回调: dom元素
           组件生命周期回调: 组件对象
     3). 在开发我们经常会利用箭头函数/bind()来改变this的指向
+
+## 6. 组件的setState()
+    1. setState()的语法
+      setState({}, [callback])
+      setState((state, props) => ({}), [callback])
+    2. setState()的特点
+      1). callback在状态更新且界面更新之后执行
+      2). 在react事件回调或生命周期回调中调用setState()
+         异步的, 不会立即更新状态, 多次调用会进行合并更新
+      3). 在setTimeout或原生事件监听回调中调用setState()
+         同步的, 立即更新状态, 多次调用会进行多次更新
