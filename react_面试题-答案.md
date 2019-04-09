@@ -358,3 +358,53 @@
     4). employees.find(e => e.salary>1200 && e.salary<1400 && e.sex==='男')
     5). employees.filter(e => e.salary>1200)
     6). employees.map(e => ({'姓名/性别': `${e.name}/${e.sex}`, '年薪': e.salary*14}))
+    
+# day06
+## 1. 对jsonp请求的理解
+    解决get类型的ajax跨域请求
+    浏览器端: 动态产生一个<script src="被请求的接口?callback=fn">, 浏览器会自动发送普通的http请求(定义好了回调函数)
+    服务器端: 处理请求, 返回的函数调用的js语句(参数就是要返回的数据)
+    浏览器端: 接收到响应后, 自动执行js代码, 调用前面准备好的回调函数
+    
+## 2. 对代理的理解
+    1). 是什么?
+        具有特定功能的程序
+    2). 运行在哪?
+        前台应用端
+        只能在开发时使用
+    3). 作用?
+        解决开发时的ajax请求跨域问题
+        a. 监视并拦截请求(3000)
+        b. 转发请求(4000)
+    4). 配置代理
+        告诉代理服务器一些信息: 转发的目标地址
+        开发环境: 前端工程师
+        生产环境: 后端工程师
+        
+## 3. componentWillMount与componentDidMount的比较
+    componentWillMount: 在第一次render()前调用一次, 为第一次render()准备数据(同步)
+    componentDidMount: 在第一次render()之后调用一次, 启动异步任务, 后面异步更新状态重新render
+
+## 4. 比较函数的call()/apply()/bind()
+    1). call(obj, param1, param2)/apply(obj, [[param1, param2])
+       调用/执行函数
+       只是强制指定函数中的this为第一个参数指定的对象
+       如果函数执行需要传参数, call是依次传递, apply需要封装成数组传递
+    2). bind()
+       返回一个新函数, 不会自动执行, 需要手动执行
+       强制指定函数中的this为第一个参数指定的对象
+
+## 5. 详细说明如何判断函数中的this
+    1). 正常情况: 执行函数的方式决定了函数中的this
+       直接调用: fn()       window
+       new调用: new fn()   新创建的对象 
+       对象调用: obj.fn()   obj对象
+       call/apply调用: fn.call(obj)   第一个参数指定的对象
+    2). 特别情况:
+       bind()返回的函数: fn2 = fn.bind(obj) fn2()第一个参数指定的对象
+       箭头函数: 使用的外部的this(内部没有自己的this) fn = () => {} fn()
+       回调函数
+          定时器回调/ajax回调/数组遍历相关方法回调: window
+          dom事件监听回调: dom元素
+          组件生命周期回调: 组件对象
+    3). 在开发我们经常会利用箭头函数/bind()来改变this的指向
