@@ -231,3 +231,8 @@
     5). 抽取通用的类链接按钮组件
         通过...透传所有接收的属性: <Button {...props} />    <LinkButton>xxxx</LinkButton>
         组件标签的所有子节点都会成为组件的children属性
+        
+# day04
+## 1. 添加分类
+
+## 2. 更新分类
