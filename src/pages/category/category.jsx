@@ -10,8 +10,9 @@ import {
 
 import {reqCategories} from '../../api'
 import UpdateForm from './update-form'
+import AddForm from './add-form'
 import LinkButton from '../../components/link-button'
-import {reqUpdateCategory} from "../../api/index";
+import {reqAddCategory, reqUpdateCategory} from "../../api/index";
 
 /*
 分类管理路由组件
@@ -29,14 +30,14 @@ export default class Category extends Component {
   /*
   根据parentId异步获取分类列表显示
    */
-  getCategories = async () => {
+  getCategories = async (parentId) => {
 
     // 更新loading状态: 加载中
     this.setState({
       loading: true
     })
-
-    const {parentId} = this.state
+    // 优先使用指定的parentId, 如果没有指定使用状态中的parentId
+    parentId = parentId || this.state.parentId
     // 异步获取分类列表
     const result = await reqCategories(parentId)  // {status: 0, data: []}
     // 更新loading状态: 加载完成
@@ -115,8 +116,29 @@ export default class Category extends Component {
   /*
   添加分类
    */
-  addCategory = () => {
+  addCategory = async () => {
+    // 得到数据
+    const {parentId, categoryName} = this.form.getFieldsValue()
+    // 关闭对话框
+    this.setState({
+      showStatus: 0
+    })
+    // 重置表单
+    this.form.resetFields()
 
+    // 异步请求添加分类
+    const result = await reqAddCategory(categoryName, parentId)
+    if(result.status===0) {
+      /*
+      添加一级分类
+      在当前分类列表下添加
+       */
+      if(parentId==='0' || parentId===this.state.parentId) {
+        // 获取当前添加的分类所在的列表
+        this.getCategories(parentId)
+      }
+
+    }
   }
 
   /*
@@ -203,7 +225,7 @@ export default class Category extends Component {
           onOk={this.addCategory}
           onCancel={() => this.setState({showStatus: 0})}
         >
-          <p>添加分类界面</p>
+          <AddForm categories={categories} parentId={parentId} setForm={form => this.form = form}/>
         </Modal>
 
         <Modal
