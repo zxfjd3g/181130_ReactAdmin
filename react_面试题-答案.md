@@ -361,7 +361,7 @@
     
 # day06
 ## 1. 对jsonp请求的理解
-    解决get类型的ajax跨域请求
+    解决get类型的ajax跨域请求, jsonp请求本质是不是ajax请求, 而是一般的http请求
     浏览器端: 动态产生一个<script src="被请求的接口?callback=fn">, 浏览器会自动发送普通的http请求(定义好了回调函数)
     服务器端: 处理请求, 返回的函数调用的js语句(参数就是要返回的数据)
     浏览器端: 接收到响应后, 自动执行js代码, 调用前面准备好的回调函数
@@ -386,13 +386,22 @@
     componentDidMount: 在第一次render()之后调用一次, 启动异步任务, 后面异步更新状态重新render
 
 ## 4. 比较函数的call()/apply()/bind()
-    1). call(obj, param1, param2)/apply(obj, [[param1, param2])
+    1). call(obj, param1, param2)/apply(obj, [param1, param2])
        调用/执行函数
        只是强制指定函数中的this为第一个参数指定的对象
        如果函数执行需要传参数, call是依次传递, apply需要封装成数组传递
     2). bind()
        返回一个新函数, 不会自动执行, 需要手动执行
        强制指定函数中的this为第一个参数指定的对象
+       新函数内部会调用原来的函数, 并指定函数中的this为obj
+       原本函数本身并没变
+       function fn () {}
+       const fn2 = fn.bind(obj)
+       function (){
+          fn.call(obj)
+       }
+       fn2()
+       
 
 ## 5. 详细说明如何判断函数中的this
     1). 正常情况: 执行函数的方式决定了函数中的this

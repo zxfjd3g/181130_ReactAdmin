@@ -73,6 +73,25 @@ export default class Category extends Component {
     })
   }
 
+  componentWillMount () {
+    this.columns = [
+      {
+        title: '分类名称',
+        dataIndex: 'name',
+      },
+      {
+        title: '操作',
+        width: 300,
+        render: (category) => (
+          <span>
+            <a href='javascript:'>修改分类</a>&nbsp;&nbsp;&nbsp;
+            {this.state.parentId==='0' ? <a href='javascript:' onClick={() => this.showSubCates(category)}>查看子分类</a> : null}
+
+          </span>
+        )
+      }];
+  }
+
   componentDidMount () {
     this.getCategories()
   }
@@ -94,30 +113,13 @@ export default class Category extends Component {
       </Button>
     )
 
-    const columns = [
-      {
-        title: '分类名称',
-        dataIndex: 'name',
-      },
-      {
-        title: '操作',
-        width: 300,
-        render: (category) => (
-          <span>
-            <a href='javascript:'>修改分类</a>&nbsp;&nbsp;&nbsp;
-            {this.state.parentId==='0' ? <a href='javascript:' onClick={() => this.showSubCates(category)}>查看子分类</a> : null}
-
-          </span>
-        )
-      }];
-
     return (
       <Card title={title} extra={extra}>
         <Table
           bordered
           rowKey='_id'
           dataSource={parentId==='0' ? categories : subCategories}
-          columns={columns}
+          columns={this.columns}
           pagination={{pageSize: 5, showQuickJumper: true, showSizeChanger: true}}
         />
       </Card>

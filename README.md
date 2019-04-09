@@ -218,7 +218,16 @@
     4). 显示二级分类
         设计状态: subCategories / parentId / parentName
         显示二级分类列表
-        
+            根据parentId状态值, 异步获取分类列表
+        setState()的问题
+            1. setState()的语法
+              setState({}, [callback])
+              setState((state, props) => ({}), [callback])
+            2. setState()的特点
+              它是异步的, 并不会立即更新状态
+              在相同的周期中多次调用会被合并到一起处理
+              callback在状态更新且界面更新之后执行
+              
     5). 抽取通用的类链接按钮组件
-        通过...透传所有接收的属性: <Button {...props} />
+        通过...透传所有接收的属性: <Button {...props} />    <LinkButton>xxxx</LinkButton>
         组件标签的所有子节点都会成为组件的children属性
