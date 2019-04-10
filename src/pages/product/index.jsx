@@ -15,6 +15,7 @@ import {
   reqSearchProducts,
   reqUpdateProductStatus
 } from '../../api'
+import {PAGE_SIZE} from "../../util/constant";
 const {Option} = Select
 
 /*
@@ -46,10 +47,10 @@ export default class ProductIndex extends Component {
     let result
     // 一般分页
     if(!searchName) {
-      result = await reqProducts(pageNum, 2)
+      result = await reqProducts(pageNum, PAGE_SIZE)
     } else {
       // 搜索分页
-      result = await reqSearchProducts({searchType, searchName, pageNum, pageSize:2})
+      result = await reqSearchProducts({searchType, searchName, pageNum, pageSize: PAGE_SIZE})
     }
 
     // 隐藏loading
@@ -181,7 +182,7 @@ export default class ProductIndex extends Component {
           dataSource={products}
           columns={this.columns}
           loading={loading}
-          pagination={{total, pageSize: 2, showQuickJumper: true, showSizeChanger: true}}
+          pagination={{total, pageSize: PAGE_SIZE, showQuickJumper: true, showSizeChanger: true}}
           onChange={(page) => this.getProducts(page.current)}
         />
       </Card>

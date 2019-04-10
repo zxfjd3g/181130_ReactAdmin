@@ -7,6 +7,7 @@ import {
 
 import {reqCategory} from '../../api'
 import LinkButton from '../../components/link-button'
+import {BASE_IMG_URL} from "../../util/constant";
 
 const {Item} = List
 
@@ -66,14 +67,14 @@ export default class ProductDetail extends Component {
   render() {
 
     // 从location中取出state中product
-    const {name, desc, price} = this.props.location.state.product
+    const {name, desc, price, imgs, detail} = this.props.location.state.product
 
     // 从状态中取出分类名
     const {cName1, cName2} = this.state
 
     const title = (
       <span>
-        <LinkButton>
+        <LinkButton onClick={() => this.props.history.goBack()}>
           <Icon type='arrow-left' style={{fontSize: 20}}/>
         </LinkButton>
         商品详情
@@ -98,6 +99,18 @@ export default class ProductDetail extends Component {
           <Item>
             <span className='left'>所属分类:</span>
             <span>{cName1}-->{cName2}</span>
+          </Item>
+          <Item>
+            <span className='left'>商品图片:</span>
+            <span>
+              {
+                imgs.map(img => <img key={img} src={BASE_IMG_URL + img} style={{width: 150, height: 150}}/>)
+              }
+            </span>
+          </Item>
+          <Item>
+            <span className='left'>商品详情:</span>
+            <div dangerouslySetInnerHTML={{__html: detail}}></div>
           </Item>
         </List>
       </Card>
