@@ -5,13 +5,15 @@ import {
   Input,
   Button,
   Icon,
-  Table
+  Table,
+  message
 } from 'antd'
 
 import LinkButton from '../../components/link-button'
 import {
   reqProducts,
-  reqSearchProducts
+  reqSearchProducts,
+  reqUpdateProductStatus
 } from '../../api'
 const {Option} = Select
 
@@ -32,6 +34,8 @@ export default class ProductIndex extends Component {
   获取指定页码的商品列表(可能带搜索)
    */
   getProducts = async (pageNum) => {
+    // 保存请求的页码
+    this.pageNum = pageNum
 
     // 显示loading
     this.setState({
@@ -61,6 +65,18 @@ export default class ProductIndex extends Component {
     }
   }
 
+  /*
+  更新商品的状态
+   */
+  updateProductStatus = async (productId, status) => {
+    const result = await reqUpdateProductStatus({productId, status})
+    message.success('更新成功!')
+    if(result.status===0) {
+      // 必须获取当前项的商品列表
+      this.getProducts(this.pageNum)
+    }
+  }
+
 
   componentDidMount () {
     this.getProducts(1)
@@ -83,12 +99,28 @@ export default class ProductIndex extends Component {
       },
       {
         title: '状态',
+        // dataIndex: 'status',
         width: 150,
         render: (product) => {
+          let btnText = '下架'
+          let text = '在售'
+          if(product.status===2) {
+            btnText = '上架'
+            text = '已下架'
+          }
+          /*const btnText = status===1 ? '下架' : '上架'
+          const text = status===1 ? '在售' : '已下架'*/
+
+          // 得到点击后新的状态值
+          const status = product.status===1 ? 2 : 1
+
           return (
             <span>
-              <Button type='primary'>下架</Button> &nbsp;&nbsp;
-              <span>在售</span>
+              <Button
+                type='primary'
+                onClick={() => this.updateProductStatus(product._id, status)}
+              >{btnText}</Button> &nbsp;
+              <span>{text}</span>
             </span>
           )
         }
@@ -99,7 +131,7 @@ export default class ProductIndex extends Component {
         render: (product) => {
           return (
             <span>
-              <LinkButton>详情</LinkButton>
+              <LinkButton onClick={() => this.props.history.push('/product/detail', {product})}>详情</LinkButton>
               <LinkButton>修改</LinkButton>
             </span>
           )
