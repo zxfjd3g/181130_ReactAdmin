@@ -168,7 +168,7 @@ export default class ProductIndex extends Component {
     )
     // Card右侧结构
     const extra = (
-      <Button type='primary'>
+      <Button type='primary' onClick={() => this.props.history.push('/product/addupdate')}>
         <Icon type='plus'/>
         添加产品
       </Button>
