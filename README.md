@@ -313,11 +313,35 @@
         异步得到的是所有promsie的结果的数组
         特点: 一次发多个请求, 只有当所有请求都成功, 才成功, 并得到成功的数据,一旦有一个失败, 整个都失败
 
-## 4. ProductAddUpdate
-    
 
-Cannot read property 'xxx' of undefined
-// 读取了undefined的xxx属性  obj.a.xxx
+# day06
+## 1. ProductAddUpdate
+    1). ant组件
+        Card / Form / Input / Cascader / Button
+        FormItem的label标题和layout
+        Cascader级联的显示和动态加载下级列表数据
+    2). 添加
+        通过form对象收集输入数据
+        父组件调用子组件对象的方法
+        调用商品添加的接口请求函数
+        成功后跳转界面
+    3). 更新
+    
+## 2. PicturesWall
+    1). antd组件
+        Upload / Modal / Icon
+        根据示例DEMO改造编写
+    2). 上传图片
+        在<Upload>上配置接口的path和请求参数名
+        监视文件状态的改变: 上传中 / 上传完成/ 删除
+        在上传成功时, 保存好相关信息: name / url
+        为父组件提供获取已上传图片文件名数组的方法
+    3). 删除图片
+        当文件状态变为删除时, 调用删除图片的接口删除上传到后台的图片
+
+## 3. RichTextEditor
+    使用基于react的富文本编程器插件库: react-draft-wysiwyg
+    根据文档中的DEMO编写
 
 
 
