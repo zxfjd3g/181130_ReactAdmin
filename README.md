@@ -255,8 +255,7 @@
         
         
 # day05
-
-## 分页
+## 0. 分页
     1). 前台分页
       一次请求获取: 所有数据的列表, 分页的页码是统计所有数据进行显示
       翻页时: 不发请求
@@ -265,3 +264,62 @@
       翻页时: 再次请求获取对应页的数据列表
     3). 如何选择
       数据量确实非常大: 优先考虑后台分页
+      
+## 1. Product
+    配置其子路由: <Route> / <Switch> / <Redirect> /exact属性
+    路由配置的逻辑
+
+## 2. ProductIndex
+    1). 分页显示
+        界面: <Card> / <Table> / Select / Icon / Input / Button
+        状态: products / total
+        接口请求函数需要的数据: pageNum, pageSize
+        异步获取第一页数据显示
+            调用分页的接口请求函数, 获取到当前页的products和总记录数total
+            更新状态: products / total
+        翻页:
+            绑定翻页的监听, 监听回调需要得到pageNum
+            异步获取指定页码的数据显示  
+      
+    2). 搜索分页
+        接口请求函数需要的数据: 
+            pageSize: 每页的条目数
+            pageNum: 当前请求第几页 (从1开始)
+            productDesc / productName: searchName 根据商品描述/名称搜索
+        状态:  searchType / searchName  / 在用户操作时实时收集数据
+        异步搜索显示分页列表
+            如果searchName有值, 调用搜索的接口请求函数获取数据并更新状态
+            
+    3). 更新商品的状态
+        初始显示: 根据product的status属性来显示  status = 1/2
+        点击切换:
+            绑定点击监听
+            异步请求更新状态
+    
+    4). 进入详情界面
+        history.push('/product/detail', {product})
+    
+    5). 进入添加界面
+         history.push('/product/addupdate')
+
+## 3. ProductDetail
+    1). 读取商品数据: location.state.product
+    2). 显示商品信息
+    3). 异步显示商品所属分类的名称
+        pCategoryId==0 : 异步获取categoryId的分类名称
+        pCategoryId!=0: 异步获取 pCategoryId/categoryId的分类名称
+    4). Promise.all([promise1, promise2])
+        返回值是promise
+        异步得到的是所有promsie的结果的数组
+        特点: 一次发多个请求, 只有当所有请求都成功, 才成功, 并得到成功的数据,一旦有一个失败, 整个都失败
+
+## 4. ProductAddUpdate
+    
+
+Cannot read property 'xxx' of undefined
+// 读取了undefined的xxx属性  obj.a.xxx
+
+
+
+
+      
