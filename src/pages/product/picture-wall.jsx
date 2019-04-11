@@ -1,5 +1,6 @@
 import React, {Component} from 'react'
-import { Upload, Icon, Modal } from 'antd';
+import {Upload, Icon, Modal, message} from 'antd'
+import {reqDeleteImg} from '../../api'
 
 /*
 操作商品图片的照片墙组件
@@ -18,7 +19,7 @@ export default class PicturesWall extends Component {
   }
 
   // 取消大图预览(隐藏Modal)
-  handleCancel = () => this.setState({ previewVisible: false })
+  handleCancel = () => this.setState({previewVisible: false})
 
   handlePreview = (file) => {
     console.log('handlePreview', file)
@@ -31,17 +32,28 @@ export default class PicturesWall extends Component {
   /*
   文件状态改变的监听回调
     上传中、完成、失败, 删除
+    file: 当前操作(上传/删除)的文件对象
+    fileList: 所有的文件对象的数组
   */
-  handleChange = ({ fileList }) => {
+  handleChange = async ({file, fileList}) => {  // handleChange({fileList, file})
 
     // 取出上传的file
-    const file = fileList[fileList.length-1]
-    console.log('handleChange()', file.status, file)
-    if(file.status==='done') { // 上传文件成功
+    console.log('handleChange()', file.status)
+    if (file.status === 'done') { // 上传文件成功
+      console.log('----', file === fileList[fileList.length - 1])
+      file = fileList[fileList.length - 1]
       // 将上传文件的文件名和url保存到file上
       const {name, url} = file.response.data
       file.name = name
       file.url = url
+    } else if (file.status === 'removed') { // 删除了fileList中的指定的file
+      // 请求后台接口删除对应的文件
+      const result = await reqDeleteImg(file.name)
+      if(result.status===0) {
+        message.success('删除图片成功')
+      } else {
+        message.error('删除图片失败')
+      }
     }
 
     this.setState({
@@ -50,10 +62,10 @@ export default class PicturesWall extends Component {
   }
 
   render() {
-    const { previewVisible, previewImage, fileList } = this.state;
+    const {previewVisible, previewImage, fileList} = this.state;
     const uploadButton = (
       <div>
-        <Icon type="plus" />
+        <Icon type="plus"/>
         <div className="ant-upload-text">Upload</div>
       </div>
     );
@@ -81,7 +93,7 @@ export default class PicturesWall extends Component {
 
 
         <Modal visible={previewVisible} footer={null} onCancel={this.handleCancel}>
-          <img alt="example" style={{ width: '100%' }} src={previewImage} />
+          <img alt="example" style={{width: '100%'}} src={previewImage}/>
         </Modal>
       </div>
     );

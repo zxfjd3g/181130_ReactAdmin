@@ -74,3 +74,13 @@ export const reqSearchProducts = ({pageSize, pageNum, searchType, searchName}) =
 更新指定商品的状态
  */
 export const reqUpdateProductStatus = ({productId, status}) => ajax('/manage/product/updateStatus', {productId, status}, 'POST')
+
+/*
+删除指定的上传的图片
+ */
+export const reqDeleteImg = (name) => ajax('/manage/img/delete', {name}, 'POST')
+
+/*
+添加商品
+ */
+export const reqAddProduct = (product) => ajax('/manage/product/add', product, 'POST')

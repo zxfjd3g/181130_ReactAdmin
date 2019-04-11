@@ -5,14 +5,15 @@ import {
   Form,
   Input,
   Cascader,
-  Button
+  Button,
+  message
 } from 'antd'
 
 import LinkButton from '../../components/link-button'
 import PictureWall from './picture-wall'
 import RichTextEditor from './rich-text-editor'
 
-import {reqCategories} from '../../api'
+import {reqCategories, reqAddProduct} from '../../api'
 
 const {Item} = Form
 
@@ -97,16 +98,36 @@ class ProductAddUpdate extends Component {
   }
 
   // 添加/更新
-  submit = () => {
+  submit = async () => {
     // 收集产品相关信息
-    const values = this.props.form.getFieldsValue()
-
+    const {name, desc, price, categories} = this.props.form.getFieldsValue()
     /*
     在父组件中得到子组件对象: <Child ref='xxx'>  this.refs.xxx
     调用子组件对象的方法: this.refs.xxx.fn()
      */
-    const imags = this.refs.pw.getImgs()
-    console.log(values, imags)
+    const imgs = this.refs.pw.getImgs()
+    const detail = this.refs.editor.getDetail()
+
+    let pCategoryId = ''
+    let categoryId = ''
+    if(categories.length==1) { // 选择的是一级分类
+      pCategoryId = '0'
+      categoryId = categories[0]
+    } else { // 选择的是二级分类
+      pCategoryId = categories[0]
+      categoryId = categories[1]
+    }
+    // 封装成对象
+    const product = {name, desc, price, pCategoryId, categoryId, detail, imgs}
+    // 请求保存
+    const result = await reqAddProduct(product)
+    if(result.status===0) {
+      message.success('保存商品成功')
+      this.props.history.goBack()
+    } else {
+      message.success('保存商品失败')
+    }
+
   }
 
   componentDidMount () {
@@ -184,7 +205,7 @@ class ProductAddUpdate extends Component {
             label="商品详情"
             labelCol={{ span: 2 }}
             wrapperCol={{ span: 20 }}>
-            <RichTextEditor />
+            <RichTextEditor ref='editor'/>
           </Item>
           <Button type='primary' onClick={this.submit}>提交</Button>
         </Form>
