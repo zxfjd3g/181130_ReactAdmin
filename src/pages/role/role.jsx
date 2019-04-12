@@ -3,7 +3,8 @@ import {
   Card,
   Button,
   Table,
-  message
+  message,
+  Modal
 } from 'antd'
 
 import {formateDate} from '../../util/util'
@@ -11,6 +12,9 @@ import {PAGE_SIZE} from "../../util/constant"
 import {
   reqRoles
 } from '../../api'
+import AddForm from './add-form'
+import AuthForm from './auth-form'
+
 /*
 角色管理路由组件
  */
@@ -20,6 +24,8 @@ export default class Role extends Component {
     roles: [], // 所有角色数组
     loading: false, // 是否正在加载中
     role: {}, // 选中的角色(初始没有)
+    isShowAdd: false, // 是否显示添加角色的界面
+    isShowAuth: false, // 是否显示授权的界面
   }
 
   /*
@@ -43,6 +49,20 @@ export default class Role extends Component {
     } else {
       message.success('获取角色列表失败')
     }
+  }
+
+  /*
+  异步添加角色
+   */
+  addRole = () => {
+
+  }
+
+  /*
+  异步更新角色(给角色授权)
+   */
+  updateRole = () => {
+
   }
 
 
@@ -76,12 +96,12 @@ export default class Role extends Component {
   render() {
 
     // 获取状态数据
-    const {roles, loading, role} = this.state
+    const {roles, loading, role, isShowAdd, isShowAuth} = this.state
 
     const title = (
       <span>
-        <Button type='primary'>创建角色</Button> &nbsp;&nbsp;
-        <Button type='primary' disabled={!role._id}>设置角色权限</Button>
+        <Button type='primary' onClick={() => this.setState({isShowAdd: true})}>创建角色</Button> &nbsp;&nbsp;
+        <Button type='primary' disabled={!role._id} onClick={() => this.setState({isShowAuth: true})}>设置角色权限</Button>
       </span>
     )
 
@@ -112,6 +132,24 @@ export default class Role extends Component {
           rowSelection={rowSelection}
           pagination={{pageSize: PAGE_SIZE, showQuickJumper: true, showSizeChanger: true}}
         />
+
+        <Modal
+          title="添加角色"
+          visible={isShowAdd}
+          onOk={this.addRole}
+          onCancel={() => this.setState({isShowAdd: false})}
+        >
+          <AddForm setForm={form => this.form = form}/>
+        </Modal>
+
+        <Modal
+          title="设置角色权限"
+          visible={isShowAuth}
+          onOk={this.updateRole}
+          onCancel={() => this.setState({isShowAuth: false})}
+        >
+          <AuthForm/>
+        </Modal>
       </Card>
     )
   }
