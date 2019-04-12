@@ -11,7 +11,8 @@ import {formateDate} from '../../util/util'
 import {PAGE_SIZE} from "../../util/constant"
 import {
   reqRoles,
-  reqAddRole
+  reqAddRole,
+  reqUpdateRole
 } from '../../api'
 import AddForm from './add-form'
 import AuthForm from './auth-form'
@@ -27,6 +28,7 @@ export default class Role extends PureComponent {
     role: {}, // 选中的角色(初始没有)
     isShowAdd: false, // 是否显示添加角色的界面
     isShowAuth: false, // 是否显示授权的界面
+    menus: [], // 当前角色的权限数组
   }
 
   /*
@@ -89,8 +91,24 @@ export default class Role extends PureComponent {
   /*
   异步更新角色(给角色授权)
    */
-  updateRole = () => {
+  updateRole = async () => {
+    this.setState({
+      isShowAuth: false
+    })
+    // 从状态中取数据
+    const {role, menus, roles} = this.state
+    role.menus = menus
 
+    // 异步请求更新角色
+    const result = await reqUpdateRole(role)
+    if(result.status===0) {
+      message.success('角色授权成功')
+      this.setState({
+        roles: [...roles]
+      })
+    } else {
+      message.success('角色授权失败')
+    }
   }
 
 
@@ -124,7 +142,7 @@ export default class Role extends PureComponent {
   render() {
 
     // 获取状态数据
-    const {roles, loading, role, isShowAdd, isShowAuth} = this.state
+    const {roles, loading, role, isShowAdd, isShowAuth, menus} = this.state
 
     const title = (
       <span>
@@ -144,7 +162,8 @@ export default class Role extends PureComponent {
         const role = selectedRows[0]
         // 更新状态
         this.setState({
-          role
+          role,
+          menus:role.menus
         })
       }
     }
@@ -174,9 +193,14 @@ export default class Role extends PureComponent {
           title="设置角色权限"
           visible={isShowAuth}
           onOk={this.updateRole}
-          onCancel={() => this.setState({isShowAuth: false})}
+          onCancel={() => this.setState({isShowAuth: false, menus: role.menus})}
         >
-          <AuthForm/>
+          <AuthForm
+            roleName={role.name}
+            menus={menus}
+            setMenus={(menus) => {
+              this.setState({menus})
+            }}/>
         </Modal>
       </Card>
     )
