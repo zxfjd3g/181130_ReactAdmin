@@ -1,4 +1,4 @@
-import React, {Component} from 'react'
+import React, {PureComponent} from 'react'
 import {
   Card,
   Button,
@@ -10,7 +10,8 @@ import {
 import {formateDate} from '../../util/util'
 import {PAGE_SIZE} from "../../util/constant"
 import {
-  reqRoles
+  reqRoles,
+  reqAddRole
 } from '../../api'
 import AddForm from './add-form'
 import AuthForm from './auth-form'
@@ -18,7 +19,7 @@ import AuthForm from './auth-form'
 /*
 角色管理路由组件
  */
-export default class Role extends Component {
+export default class Role extends PureComponent {
 
   state = {
     roles: [], // 所有角色数组
@@ -54,8 +55,35 @@ export default class Role extends Component {
   /*
   异步添加角色
    */
-  addRole = () => {
+  addRole = async () => {
+    // 收集输入数据
+    const roleName = this.form.getFieldValue('roleName')
+    this.form.resetFields()
+    this.setState({isShowAdd: false})
 
+    // 发添加角色的请求
+    const result = await reqAddRole(roleName)
+
+    // 提示
+    if(result.status===0) {
+      message.success('添加角色成功!')
+      // this.getRoles()
+      // 得到新添加的角色
+      const role = result.data
+      const {roles} = this.state
+     /* roles.push(role)  // 不会进行重新render()更新
+      this.setState({
+        roles
+      })*/
+
+      // 更新roles状态
+      this.setState({
+        roles: [...roles, role]
+      })
+
+    } else {
+      message.success('添加角色失败!')
+    }
   }
 
   /*
