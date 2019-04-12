@@ -13,7 +13,7 @@ import LinkButton from '../../components/link-button'
 import PictureWall from './picture-wall'
 import RichTextEditor from './rich-text-editor'
 
-import {reqCategories, reqAddProduct} from '../../api'
+import {reqCategories, reqAddOrUpdateProduct} from '../../api'
 
 const {Item} = Form
 
@@ -142,8 +142,12 @@ class ProductAddUpdate extends Component {
     }
     // 封装成对象
     const product = {name, desc, price, pCategoryId, categoryId, detail, imgs}
+    // 如果是更新, 指定product的_id属性值
+    if(this.isUpdate) {
+      product._id = this.product._id
+    }
     // 请求保存
-    const result = await reqAddProduct(product)
+    const result = await reqAddOrUpdateProduct(product)
     if(result.status===0) {
       message.success('保存商品成功')
       this.props.history.goBack()

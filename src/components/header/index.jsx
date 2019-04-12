@@ -46,7 +46,7 @@ class Header extends Component {
         return item.title
       } else if (item.children) {
         // 在children中找对应的item
-        const cItem = item.children.find(cItem => cItem.key===path)
+        const cItem = item.children.find(cItem => path.indexOf(cItem.key)===0)
         if(cItem) {
           return cItem.title
         }
