@@ -84,13 +84,36 @@ class ProductAddUpdate extends Component {
   /*
   生成级联的一级列表
    */
-  initOptions = () => {
+  initOptions = async () => {
     // 根据一级分类数组生成option的数组
     const options = this.categories.map(c => ({
       value: c._id,
       label: c.name,
       isLeaf: false,
     }))
+
+    // 如果当前是更新, 且商品是一个二级分类的商品
+    const {product, isUpdate} = this
+    if(isUpdate && product.pCategoryId!=='0') {
+
+      // 异步获取product.pCategoryId的二级分类列表
+      await this.getCategories(product.pCategoryId)
+      const {subCategories} = this
+
+      // 生成二级的option数组
+      const cOptions = subCategories.map(c => ({
+        value: c._id,
+        label: c.name,
+        isLeaf: true,
+      }))
+
+      // 找到对应的option
+      const option = options.find(option => option.value===product.pCategoryId)
+
+      // 将cOptions添加为对应的一级option的children
+      option.children = cOptions
+    }
+
     // 更新状态
     this.setState({
       options
@@ -135,17 +158,38 @@ class ProductAddUpdate extends Component {
     this.getCategories('0')
   }
 
+  componentWillMount () {
+    // 取出跳转传入的数据
+    const product = this.props.location.state
+    this.product = product || {}
+    this.isUpdate = !!product   // !!xxx将一个数据强制转换成布尔类型
+  }
+
   render() {
 
+    const {product, isUpdate} = this
+    const {pCategoryId, categoryId} = product
     const {options} = this.state
     const {getFieldDecorator} = this.props.form
+
+    // 准备用于级联列表显示的数组
+    const categories = []
+    if(isUpdate) {
+      if(pCategoryId==='0') {
+        categories.push(categoryId)
+      } else {
+        categories.push(pCategoryId)
+        categories.push(categoryId)
+      }
+    }
+
 
     const title = (
       <span>
         <LinkButton onClick={() => this.props.history.goBack()}>
           <Icon type='arrow-left' style={{fontSize: 20}}/>
         </LinkButton>
-        添加商品
+        {isUpdate ? '修改商品' : '添加商品'}
       </span>
     )
 
@@ -161,7 +205,7 @@ class ProductAddUpdate extends Component {
           <Item label="商品名称" {...formItemLayout}>
             {
               getFieldDecorator('name', {
-                initialValue: '',
+                initialValue: product.name,
                 rules: [{required: true, message: '商品名称必须输入'}]
               })(
                 <Input placeholer='请输入商品名称'/>
@@ -171,7 +215,7 @@ class ProductAddUpdate extends Component {
           <Item label="商品描述" {...formItemLayout}>
             {
               getFieldDecorator('desc', {
-                initialValue: '',
+                initialValue: product.desc,
               })(
                 <Input placeholer='请输入商品描述'/>
               )
@@ -180,7 +224,7 @@ class ProductAddUpdate extends Component {
           <Item label="商品价格" {...formItemLayout}>
             {
               getFieldDecorator('price', {
-                initialValue: '',
+                initialValue: product.price,
               })(
                 <Input type='number' placeholer='请输入商品价格' addonAfter='元'/>
               )
@@ -189,7 +233,7 @@ class ProductAddUpdate extends Component {
           <Item label="商品分类" {...formItemLayout}>
             {
               getFieldDecorator('categories', {
-                initialValue: [],
+                initialValue: categories,
               })(
                 <Cascader
                   options={options}
@@ -199,13 +243,13 @@ class ProductAddUpdate extends Component {
             }
           </Item>
           <Item label="商品图片" {...formItemLayout}>
-            <PictureWall ref='pw'/>
+            <PictureWall ref='pw' imgs={product.imgs}/>
           </Item>
           <Item
             label="商品详情"
             labelCol={{ span: 2 }}
             wrapperCol={{ span: 20 }}>
-            <RichTextEditor ref='editor'/>
+            <RichTextEditor ref='editor' detail={product.detail}/>
           </Item>
           <Button type='primary' onClick={this.submit}>提交</Button>
         </Form>

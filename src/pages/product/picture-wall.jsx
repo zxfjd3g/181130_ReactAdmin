@@ -1,16 +1,23 @@
 import React, {Component} from 'react'
+import PropTypes from 'prop-types'
 import {Upload, Icon, Modal, message} from 'antd'
 import {reqDeleteImg} from '../../api'
+import {BASE_IMG_URL} from "../../util/constant";
 
 /*
 操作商品图片的照片墙组件
  */
 export default class PicturesWall extends Component {
+
+  static propTypes = {
+    imgs: PropTypes.array
+  }
+
   state = {
     previewVisible: false, // 是否显示大图预览
     previewImage: '', // 可以预览的大图url
     // file: 代表一个上传文件的相关信息的对象
-    fileList: [],
+    fileList: [], // {uid, name, url, status='done'}
   };
 
   // 获取所有已上传图片文件名的数组
@@ -61,6 +68,22 @@ export default class PicturesWall extends Component {
     })
   }
 
+  componentWillMount () {
+    const {imgs} = this.props
+    if(imgs && imgs.length>0) {
+      // 根据传入的imgs生成fileList
+      const fileList = imgs.map((img, index) => ({
+        uid: -index,
+        name: img,
+        url: BASE_IMG_URL + img,
+        status: 'done'
+      }))
+      this.setState({
+        fileList
+      })
+    }
+  }
+
   render() {
     const {previewVisible, previewImage, fileList} = this.state;
     const uploadButton = (
@@ -75,6 +98,7 @@ export default class PicturesWall extends Component {
         {/*
         action: 指定上传的后台处理url
         listType: 显示的样式效果
+        accept: 接收的文件类型
         fileList: 所有上传图片的相关信息对象的数组
         name: 请求参数的参数名
         onPreview: 点击预览的回调
@@ -83,6 +107,7 @@ export default class PicturesWall extends Component {
         <Upload
           action="/manage/img/upload"
           listType="picture-card"
+          accept='image/*'
           fileList={fileList}
           name='image'
           onPreview={this.handlePreview}
