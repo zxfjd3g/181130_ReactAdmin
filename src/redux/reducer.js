@@ -4,7 +4,10 @@
 import {combineReducers} from 'redux'
 
 import {
-  SET_MENU_TITLE
+  SET_MENU_TITLE,
+  RECEIVE_USER,
+  ERROR_MSG,
+  RESET_USER
 } from './action-types'
 
 /*
@@ -28,7 +31,12 @@ function menuTitle(state=initMenuTitle, action) {
 const initUser = storageUtil.getUser()
 function user(state=initUser, action) {
   switch (action.type) {
-
+    case RECEIVE_USER:
+      return action.data
+    case ERROR_MSG:
+      return {...state, errorMsg: action.data}
+    case RESET_USER:
+      return {}
     default:
       return state
   }

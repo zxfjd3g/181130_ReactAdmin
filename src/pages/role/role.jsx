@@ -6,6 +6,7 @@ import {
   message,
   Modal
 } from 'antd'
+import {connect} from 'react-redux'
 
 import {formateDate} from '../../util/util'
 import {PAGE_SIZE} from "../../util/constant"
@@ -16,13 +17,11 @@ import {
 } from '../../api'
 import AddForm from './add-form'
 import AuthForm from './auth-form'
-import MemoryUtils from "../../util/MemoryUtils";
-import storageUtil from "../../util/storageUtil";
-
+import {logout} from '../../redux/actions'
 /*
 角色管理路由组件
  */
-export default class Role extends PureComponent {
+class Role extends PureComponent {
 
   state = {
     roles: [], // 所有角色数组
@@ -106,10 +105,8 @@ export default class Role extends PureComponent {
     if(result.status===0) {
 
       // 如果更新的是当前用户对应角色的权限, 得重新登陆
-      if(MemoryUtils.user.role._id === role._id) {
-        storageUtil.removeUser()
-        MemoryUtils.user = {}
-        this.props.history.replace('/login')
+      if(this.props.user.role._id === role._id) {
+        this.props.logout()
         message.success('修改了当前用户的权限, 请重新登陆')
       } else {
         message.success('角色授权成功')
@@ -220,3 +217,10 @@ export default class Role extends PureComponent {
     )
   }
 }
+
+export default connect(
+  state => ({
+    user: state.user
+  }),
+  {logout}
+)(Role)

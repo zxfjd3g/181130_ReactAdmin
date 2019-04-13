@@ -7,17 +7,17 @@ import {connect} from 'react-redux'
 import menuList from '../../config/menuConfig'
 import {formateDate} from '../../util/util'
 import {getWeather} from '../../api'
-import MemoryUtils from '../../util/MemoryUtils'
 import './index.less'
 import LinkButton from "../link-button/index";
-import storageUtil from "../../util/storageUtil";
+import {logout} from '../../redux/actions'
 /*
 头部
  */
 class Header extends Component {
 
   static propTypes = {
-    title: PropTypes.string.isRequired
+    title: PropTypes.string.isRequired,
+    user: PropTypes.object.isRequired,
   }
 
   state = {
@@ -81,9 +81,7 @@ class Header extends Component {
     Modal.confirm({
       content: '确定退出吗?',
       onOk: () => {
-        storageUtil.removeUser()
-        MemoryUtils.user = {}
-        this.props.history.replace('/login')
+        this.props.logout()
       }
     })
   }
@@ -105,7 +103,7 @@ class Header extends Component {
     const {sysTime, dayPictureUrl, weather} = this.state
 
     // 获取当前登陆的用户名
-    const username = MemoryUtils.user.username
+    const username = this.props.user.username
 
     //const title = this.getTitle()
     const title = this.props.title
@@ -131,6 +129,10 @@ class Header extends Component {
 }
 
 export default withRouter(connect(
-  state => ({title: state.menuTitle})
+  state => ({
+    title: state.menuTitle,
+    user: state.user
+  }),
+  {logout}
 )(Header))  // <Header title={state.menuTitle}/>
 

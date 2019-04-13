@@ -1,52 +1,33 @@
 import React, {Component} from 'react'
 import {Redirect} from 'react-router-dom'
+import PropTypes from 'prop-types'
+import {connect} from 'react-redux'
+
 import LoginForm from './login-form'
 import logo from '../../assets/images/logo.png'
 import './index.less'
-
-import {reqLogin} from '../../api'
-import storageUtil from '../../util/storageUtil'
-import MemoryUtils from '../../util/MemoryUtils'
+import {login} from '../../redux/actions'
 
 
+class Login extends Component {
 
-
-export default class Login extends Component {
-
-  state = {
-    errorMsg: '', // 需要显示请求登陆失败的提示文本
+  static propTypes = {
+    user: PropTypes.object.isRequired,
+    login: PropTypes.func.isRequired
   }
 
   // 请求登陆
   // login = (name, pwd) => {
-  login = async ({username, password}) => {
-    console.log('login login()')
-    // alert(`发送ajax请求: username=${username}, password=${password}`)
-    const result = await reqLogin(username, password) // {status: 0, data: user对象} {status: 1, msg: '错误信息'}
-    // console.log('result', result)
-    if(result.status===0) { // 成功了
-      const user = result.data
-      // 保存user到local storage
-      storageUtil.saveUser(user)
-      // 保存user到内存中
-      MemoryUtils.user = user
-      // 跳转到后台管理界面
-      this.props.history.replace('/')
-    } else {
-      // 显示错误信息
-      this.setState({
-        errorMsg: result.msg
-      })
-    }
+  login = ({username, password}) => {
+    this.props.login(username, password)
   }
 
   render() {
     // 如果用户已经登陆, 自动跳转到admin
-    if(MemoryUtils.user && MemoryUtils.user._id) {
+    if(this.props.user._id) {
       return <Redirect to='/'/>
     }
-
-    const {errorMsg} = this.state
+    const errorMsg = this.props.user.errorMsg
 
     return (
       <div className='login'>
@@ -68,6 +49,13 @@ export default class Login extends Component {
   }
 }
 
+
+export default connect(
+  state => ({
+    user: state.user
+  }),
+  {login}
+)(Login)
 /*
 1. 在父组件中给子组件标签传递属性
 2. 子组件中声明接收属性

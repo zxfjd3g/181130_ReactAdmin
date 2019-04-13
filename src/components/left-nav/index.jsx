@@ -7,7 +7,6 @@ import {connect} from 'react-redux'
 import './index.less'
 import menuList from '../../config/menuConfig'
 import logo from '../../assets/images/logo.png'
-import MemoryUtils from "../../util/MemoryUtils"
 import {setMenuTitle} from '../../redux/actions'
 
 const SubMenu = Menu.SubMenu
@@ -32,7 +31,7 @@ class LeftNav extends Component {
     2. 当前用户是admin
     3. 当前用户的权限key集合中包含item的key
      */
-    if(item.isPublic || MemoryUtils.user.username==='admin' || this.menuSet.has(item.key)) {
+    if(item.isPublic || this.props.user.username==='admin' || this.menuSet.has(item.key)) {
       return true
       // 如果当前用户有item的children中的某个子节点的权限
     } else if (item.children && item.children.find(cItem => this.menuSet.has(cItem.key))) {
@@ -173,7 +172,7 @@ class LeftNav extends Component {
   componentWillMount () {
 
     // 得到当前用户的权限menus, 并封装成set保存
-    this.menuSet = new Set(MemoryUtils.user.role.menus || [])
+    this.menuSet = new Set(this.props.user.role.menus || [])
 
     this.menuNodes = this.getMenuNodes(menuList)
   }
@@ -224,6 +223,8 @@ withRouter(): 高阶组件
 返回的是包装产生的新组件: 向LeftNav中传入history/location/match三个属性
  */
 export default withRouter(connect(
-  state => ({}),
+  state => ({
+    user: state.user
+  }),
   {setMenuTitle}
 )(LeftNav))
