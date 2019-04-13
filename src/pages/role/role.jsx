@@ -16,6 +16,8 @@ import {
 } from '../../api'
 import AddForm from './add-form'
 import AuthForm from './auth-form'
+import MemoryUtils from "../../util/MemoryUtils";
+import storageUtil from "../../util/storageUtil";
 
 /*
 角色管理路由组件
@@ -102,10 +104,22 @@ export default class Role extends PureComponent {
     // 异步请求更新角色
     const result = await reqUpdateRole(role)
     if(result.status===0) {
-      message.success('角色授权成功')
-      this.setState({
-        roles: [...roles]
-      })
+
+      // 如果更新的是当前用户对应角色的权限, 得重新登陆
+      if(MemoryUtils.user.role._id === role._id) {
+        storageUtil.removeUser()
+        MemoryUtils.user = {}
+        this.props.history.replace('/login')
+        message.success('修改了当前用户的权限, 请重新登陆')
+      } else {
+        message.success('角色授权成功')
+        this.setState({
+          roles: [...roles]
+        })
+      }
+
+
+
     } else {
       message.success('角色授权失败')
     }

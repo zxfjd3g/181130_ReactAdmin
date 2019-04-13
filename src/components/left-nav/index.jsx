@@ -4,6 +4,7 @@ import {Link, withRouter} from 'react-router-dom'
 import './index.less'
 import menuList from '../../config/menuConfig'
 import logo from '../../assets/images/logo.png'
+import MemoryUtils from "../../util/MemoryUtils";
 
 const SubMenu = Menu.SubMenu
 const Item = Menu.Item
@@ -14,6 +15,26 @@ const Item = Menu.Item
 class LeftNav extends Component {
 
   /*
+  判断当前用户是否有指定item对应的权限
+   */
+  hasAuth = (item) => {
+
+    /*
+    1. item是公开的
+    2. 当前用户是admin
+    3. 当前用户的权限key集合中包含item的key
+     */
+    if(item.isPublic || MemoryUtils.user.username==='admin' || this.menuSet.has(item.key)) {
+      return true
+      // 如果当前用户有item的children中的某个子节点的权限
+    } else if (item.children && item.children.find(cItem => this.menuSet.has(cItem.key))) {
+      return true
+    }
+
+    return false
+  }
+
+  /*
   返回包含n个<Item>和<SubMenu>的数组
   1. 使用arr的map()实现二级菜单
   2. 使用arr的reduce()实现二级菜单
@@ -22,34 +43,37 @@ class LeftNav extends Component {
   */
 
   getMenuNodes = (list) => {
-    return list.reduce((pre, item) => {
-      if(!item.children) {
-        pre.push((
-          <Menu.Item key={item.key}>
-            <Link to={item.key}>
-              <Icon type={item.icon} />
-              <span>{item.title}</span>
-            </Link>
-          </Menu.Item>
-        ))
-      } else {// item有children才去递归调用
+    return list.reduce((pre, item) => { // item ==> MenuItem/ SubMenu
+      // 如果当前用户有item对应的权限才进入
+      if(this.hasAuth(item)) {
+        if(!item.children) {
+          pre.push((
+            <Menu.Item key={item.key}>
+              <Link to={item.key}>
+                <Icon type={item.icon} />
+                <span>{item.title}</span>
+              </Link>
+            </Menu.Item>
+          ))
+        } else {// item有children才去递归调用
 
-        // 确定openKey的值, 并保存到组件对象
-        const path = this.props.location.pathname
-        const cItem = item.children.find(cItem => path.indexOf(cItem.key)===0)
-        if(cItem) {
-          const openKey = item.key
-          this.openKey = openKey
+          // 确定openKey的值, 并保存到组件对象
+          const path = this.props.location.pathname
+          const cItem = item.children.find(cItem => path.indexOf(cItem.key)===0)
+          if(cItem) {
+            const openKey = item.key
+            this.openKey = openKey
+          }
+
+
+          pre.push((
+            <SubMenu key={item.key} title={<span><Icon type={item.icon} /><span>{item.title}</span></span>}>
+              {
+                this.getMenuNodes(item.children)
+              }
+            </SubMenu>
+          ))
         }
-
-
-        pre.push((
-          <SubMenu key={item.key} title={<span><Icon type={item.icon} /><span>{item.title}</span></span>}>
-            {
-              this.getMenuNodes(item.children)
-            }
-          </SubMenu>
-        ))
       }
       return pre
     }, [])
@@ -129,6 +153,10 @@ class LeftNav extends Component {
   componentDidMount: 在第一次render()之后调用一次, 启动异步任务, 后面异步更新状态重新render
   */
   componentWillMount () {
+
+    // 得到当前用户的权限menus, 并封装成set保存
+    this.menuSet = new Set(MemoryUtils.user.role.menus || [])
+
     this.menuNodes = this.getMenuNodes(menuList)
   }
 

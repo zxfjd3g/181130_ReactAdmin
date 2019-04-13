@@ -1,12 +1,14 @@
 import React, {Component} from 'react'
-import {Row, Col} from 'antd'
+import {Row, Col, Modal} from 'antd'
 import {withRouter} from 'react-router-dom'
 
 import menuList from '../../config/menuConfig'
 import {formateDate} from '../../util/util'
 import {getWeather} from '../../api'
-import MemorUtils from '../../util/MemoryUtils'
+import MemoryUtils from '../../util/MemoryUtils'
 import './index.less'
+import LinkButton from "../link-button/index";
+import storageUtil from "../../util/storageUtil";
 /*
 头部
  */
@@ -66,6 +68,20 @@ class Header extends Component {
     }, 1000)
   }
 
+  /*
+  退出登陆
+   */
+  logout = () => {
+    Modal.confirm({
+      content: '确定退出吗?',
+      onOk: () => {
+        storageUtil.removeUser()
+        MemoryUtils.user = {}
+        this.props.history.replace('/login')
+      }
+    })
+  }
+
   // 在当前组件对象死亡前
   componentWillUnmount () {
     // 清除定时器
@@ -83,14 +99,14 @@ class Header extends Component {
     const {sysTime, dayPictureUrl, weather} = this.state
 
     // 获取当前登陆的用户名
-    const username = MemorUtils.user.username
+    const username = MemoryUtils.user.username
 
     const title = this.getTitle()
 
     return (
       <div className='header'>
         <div className="header-top"><span>欢迎，{username}</span>
-          <a href='javascript:' style={{marginLeft: 10}}>退出</a>
+          <LinkButton style={{marginLeft: 10}} onClick={this.logout}>退出</LinkButton>
         </div>
         <Row className='header-bottom'>
           <Col span={4} className='title'>

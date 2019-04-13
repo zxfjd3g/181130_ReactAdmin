@@ -346,12 +346,39 @@
 
 # day07
 ## 1. 商品修改
+    1). 商品分类的默认选中
+        如果当前商品是一个2级分类下的商品
+    2). 商品图片的默认显示
+        将商品的imgs传入图片上传组件
+        图片上传组件中读取imgs转换为fileList状态显示
+    3). 商品详情的默认显示
+        将商品的detail传入富文本组件
+        富文本组件内读取detail并转换为editorState状态显示
+    4). 更新商品
+        收集数据封装成product对象, 要指定_id属性
+        调用更新的接口请求更新, 并返回商品列表界面
 
 ## 2. 角色管理
-
+    1). 角色前台分页显示
+    2). 添加角色
+    3). 给指定角色授权
+        界面: Tree
+        选择Node时, 更新menus, 但不能直接更新role中menus
+        点击cancel, 设置menus为role.menus的值
+        确定时: role.menus=menus, 请求更新role
+   
 ## 3. 用户管理
+    1). 添加用户
+    2). 修改用户
+    3). 删除用户
+
 
 ## 4. 权限管理
 
+
+PureComponent
+Component
+setState(): 异步/合并更新, 同步更新
+shouldComponentUpdate()
 
       

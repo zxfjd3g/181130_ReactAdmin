@@ -15,6 +15,4 @@ if(user._id) { // 前面登陆过
   MemoryUtil.user = user
 }
 
-
-
 ReactDOM.render(<App/>, document.getElementById('root'))
