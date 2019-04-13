@@ -1,10 +1,14 @@
 import React, {Component} from 'react'
+import PropTypes from 'prop-types'
 import {Menu, Icon} from 'antd'
 import {Link, withRouter} from 'react-router-dom'
+import {connect} from 'react-redux'
+
 import './index.less'
 import menuList from '../../config/menuConfig'
 import logo from '../../assets/images/logo.png'
-import MemoryUtils from "../../util/MemoryUtils";
+import MemoryUtils from "../../util/MemoryUtils"
+import {setMenuTitle} from '../../redux/actions'
 
 const SubMenu = Menu.SubMenu
 const Item = Menu.Item
@@ -13,6 +17,10 @@ const Item = Menu.Item
 左侧导航
  */
 class LeftNav extends Component {
+
+  static propTypes = {
+    setMenuTitle: PropTypes.func.isRequired
+  }
 
   /*
   判断当前用户是否有指定item对应的权限
@@ -43,13 +51,24 @@ class LeftNav extends Component {
   */
 
   getMenuNodes = (list) => {
+    // 当前请求的path路径
+    const path = this.props.location.pathname
+
     return list.reduce((pre, item) => { // item ==> MenuItem/ SubMenu
       // 如果当前用户有item对应的权限才进入
       if(this.hasAuth(item)) {
         if(!item.children) {
+
+          // 找到与我当前path匹配的item, item的title就是我的menuTitle
+          if(path.indexOf(item.key)===0) {
+            const menuTitle = item.title
+            // 将menuTitle保存到redux的状态中
+            this.props.setMenuTitle(menuTitle)
+          }
+
           pre.push((
             <Menu.Item key={item.key}>
-              <Link to={item.key}>
+              <Link to={item.key} onClick={() => this.props.setMenuTitle(item.title)}>
                 <Icon type={item.icon} />
                 <span>{item.title}</span>
               </Link>
@@ -58,7 +77,6 @@ class LeftNav extends Component {
         } else {// item有children才去递归调用
 
           // 确定openKey的值, 并保存到组件对象
-          const path = this.props.location.pathname
           const cItem = item.children.find(cItem => path.indexOf(cItem.key)===0)
           if(cItem) {
             const openKey = item.key
@@ -205,4 +223,7 @@ withRouter(): 高阶组件
 接收的是非路由组件: LeftNav
 返回的是包装产生的新组件: 向LeftNav中传入history/location/match三个属性
  */
-export default withRouter(LeftNav)
+export default withRouter(connect(
+  state => ({}),
+  {setMenuTitle}
+)(LeftNav))

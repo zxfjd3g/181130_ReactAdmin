@@ -1,6 +1,8 @@
 import React, {Component} from 'react'
+import PropTypes from 'prop-types'
 import {Row, Col, Modal} from 'antd'
 import {withRouter} from 'react-router-dom'
+import {connect} from 'react-redux'
 
 import menuList from '../../config/menuConfig'
 import {formateDate} from '../../util/util'
@@ -13,6 +15,10 @@ import storageUtil from "../../util/storageUtil";
 头部
  */
 class Header extends Component {
+
+  static propTypes = {
+    title: PropTypes.string.isRequired
+  }
 
   state = {
     sysTime: formateDate(Date.now()),
@@ -101,7 +107,8 @@ class Header extends Component {
     // 获取当前登陆的用户名
     const username = MemoryUtils.user.username
 
-    const title = this.getTitle()
+    //const title = this.getTitle()
+    const title = this.props.title
 
     return (
       <div className='header'>
@@ -123,4 +130,7 @@ class Header extends Component {
   }
 }
 
-export default withRouter(Header)
+export default withRouter(connect(
+  state => ({title: state.menuTitle})
+)(Header))  // <Header title={state.menuTitle}/>
+

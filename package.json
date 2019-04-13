@@ -11,11 +11,15 @@
     "prop-types": "15.6.2",
     "axios": "0.18.0",
     "store": "2.0.12",
-    "jsonp": "0.2.1"
+    "jsonp": "0.2.1",
+    "redux": "3.7.2",
+    "react-redux": "6.0.0",
+    "redux-thunk": "^2.3.0"
   },
   "devDependencies": {
     "react-app-rewired": "1.6.2",
-    "babel-plugin-import": "1.11.0"
+    "babel-plugin-import": "1.11.0",
+    "redux-devtools-extension": "2.13.7"
   },
 
   "scripts": {
